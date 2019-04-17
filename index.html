@@ -1,0 +1,65 @@
+
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="header">
+<h2>Login</h2>
+</div>
+
+<form style="font-family:courier;" id="loginForm" action="login.php" method="POST">
+<div class="input-group">
+    <label>UCID:</label> 
+    <input name="UCID" id="UCID">
+</div>
+<div class="input-group">
+    <label>Password:</label> 
+    <input type="password" name="Password" id="Password"><br/>
+</div>
+<div class="input-group">
+    <button id="submit" type="button" class="btn">Login</button>
+</div>
+
+<div style="color:blue; font-size:75%" id="lin"></div>
+<div style="color:blue; font-size:75%" id="njitres"></div>
+<div style="color:blue; font-size:75%" id="ourres"></div>
+
+</form>
+
+<div id="ack"></div>
+
+<script>
+$(document).ready(function(){
+
+    $("button").click(function(){
+
+        $.ajax({method: 'POST',
+            url: 'login.php',
+            cache: true,
+            data: { intent: "login", username: $("#UCID").val(), password: $("#Password").val()},
+            datatype: "json",
+            beforeSend: function() {
+              $("#lin").html("Logging in....");
+              $("#njitres").html("");
+              $("#ourres").html("");
+           },
+            success: function(result){
+            var replies = result.split(',')
+            if( replies[0] == "yes"){
+                if (replies[1] == 1){
+                 window.location.href = "instructor.html";}
+                else{
+                window.location.href = "student.html";}}
+            else{
+                $("#lin").html("Invalid Login");}
+        }});
+    });
+});
+</script>
+
+</body>
+</html>
